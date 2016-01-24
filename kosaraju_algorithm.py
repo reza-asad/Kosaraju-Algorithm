@@ -3,7 +3,13 @@
 # Jan 24th, 2016
 ######################### Algorithms ######################
 # Implementation of the strongly conncected components of 
-# a directed graph
+# a directed graph using Kosaraju's algorithm
+# input: 
+#	G: A dictionary representing a directed graph
+#	reverse: A boolean to indicate weather the input
+#		graph is the original graph or if it is reversed
+# output:
+#	leader: The strongly connected componets of the graph
 explored = set()
 finishing_time = {}
 leader = {}
