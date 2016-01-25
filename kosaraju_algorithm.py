@@ -10,50 +10,69 @@
 #		graph is the original graph or if it is reversed
 # output:
 #	leader: The strongly connected componets of the graph
-explored = set()
+import sys
+sys.setrecursionlimit(15000)
+
 finishing_time = {}
 leader = {}
-def SCC(G, reverse):
-	t = 0
-	n = len(G.keys())
-	for i in range(n, -1, -1):
+
+def SCC(G, is_reverse):
+	def dfs(i):
+		stack = []
+		seen = []
+		stack.append(i)
+		while stack:
+			v = stack.pop()
+			if v not in explored:
+				explored.add(v)
+				seen.append(v)
+				leader[v] = s[0]
+				stack.extend(G[v] - explored)
+
+		for i in range(len(seen) - 1, -1, -1):
+			t[0] += 1
+			finishing_time[t[0]] = seen[i]
+
+	explored = set()
+	n = len(G)
+	t = [0]
+	s = [0]
+	i = n
+	while i > 0:
 		if i not in explored:
-			if reverse == 0:
-				s = i
-			dfs(G, i)
-	def dfs(G, i):
-		explored.add(i)
-		if reverse == 0:
-			leader[i] = s
-		for j in G[i]:
-			if j not in  explored:
-				dfs(G, j)
-		
-		if reverse == 1:
-			t += 1
-			finishing_time[i] = t
-
-
+			if is_reverse == 0:
+				s[0] = i
+				dfs(finishing_time[i])
+			else:
+				dfs(i)
+		i -= 1
 
 
 ######################## Main ###############################
 # Creating the reversed graph fot the first pass of the algorithm
-from collections import defaultdict
+#from collections import defaultdict
 
-graph = defaultdict(set)
-data_file = open("SCC.txt", "rb")
-for line in data_file:
-	graph[int(line.split()[1])].add(int(line.split()[0]))
+#graph = defaultdict(set)
+#data_file = open("SCC.txt", "rb")
+#for line in data_file:
+#	graph[int(line.split()[1])].add(int(line.split()[0]))
 
-SCC(graph, 1)
+#SCC(graph, 1)
 
 # Creating the graph fot the second pass of the algorithm
-graph = defaultdict(set)
-data_file = open("SCC.txt", "rb")
-for line in data_file:
-	graph[int(line.split()[0])].add(int(line.split()[1]))
+#graph = defaultdict(set)
+#data_file = open("SCC.txt", "rb")
+#for line in data_file:
+#	graph[int(line.split()[0])].add(int(line.split()[1]))
 
+#SCC(graph, 0)
+
+
+graph = {1:{7}, 4:{1}, 7:{4, 9}, 9:{6}, 6:{3, 8}, 3:{9}, 8:{2}, 2:{5}, 5:{8}}
+
+SCC(graph, 1)
+print finishing_time
+
+graph = {7:{1}, 4:{7}, 1:{4}, 9:{3, 7}, 6:{9}, 3:{6}, 8:{5, 6}, 5:{2}, 2:{8}}
 SCC(graph, 0)
-
-
-
+print leader
