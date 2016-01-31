@@ -6,11 +6,15 @@
 # a directed graph using Kosaraju's algorithm
 # input: 
 #   G: A dictionary representing a directed graph
-#   reverse: A boolean to indicate weather the input
+#   is_reverse: A boolean to indicate weather the input
 #       graph is the original graph or if it is reversed
+#   num_nodes: The number of nodes of the graph
+#
 # output:
 #   leader: The strongly connected componets of the graph
-
+#
+# Note: it is assumed that the graphs are labled from 1 to 
+# num_nodes
 finishing_time = {}
 t = [0]
 s = [0]
@@ -35,7 +39,7 @@ def SCC(G, is_reverse, max_node_label):
 
     explored = set()
     leader = {}
-    i = max_node_label
+    i = num_nodes
     while i > 0:
         if is_reverse == 1:
             if i not in explored:
@@ -49,7 +53,8 @@ def SCC(G, is_reverse, max_node_label):
     print sorted(Counter(leader.values()).values())[-5:]
 
 ######################## Main ###############################
-# Creating the reversed graph fot the first pass of the algorithm
+# Creating the reversed graph fot the first pass of the algorithm.
+# The ordering of the second pass is determined during this pass.
 from collections import defaultdict, Counter
 
 graph = defaultdict(set)
@@ -59,6 +64,8 @@ for line in data_file:
 
 SCC(graph, 1, 875714)
 
+# Creating the original graph for the second pass of the algorithm.
+# The graph is traversed using the ordering computed in the first pass.
 graph = defaultdict(set)
 data_file = open("SCC.txt", "rb")
 for line in data_file:
