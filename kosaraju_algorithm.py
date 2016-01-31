@@ -19,7 +19,7 @@ finishing_time = {}
 t = [0]
 s = [0]
 
-def SCC(G, is_reverse, max_node_label):
+def SCC(G, is_reverse, num_nodes):
     def dfs(G, i):
         stack = []
         seen = []
